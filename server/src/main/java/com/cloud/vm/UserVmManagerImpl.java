@@ -1129,6 +1129,13 @@ public class UserVmManagerImpl extends ManagerBase implements UserVmManager, Vir
         }
 
         ServiceOfferingVO currentServiceOffering = _offeringDao.findByIdIncludingRemoved(vmInstance.getId(), vmInstance.getServiceOfferingId());
+        if (currentServiceOffering.getDiskOfferingStrictness() != newServiceOffering.getDiskOfferingStrictness()) {
+            throw new InvalidParameterValueException("Unable to upgrade VM, since disk offering strictness flag is not same for new service offering and old service offering");
+        }
+
+        if (currentServiceOffering.getDiskOfferingStrictness() && currentServiceOffering.getDiskOfferingId() != newServiceOffering.getDiskOfferingId()) {
+            throw new InvalidParameterValueException("Unable to Scale VM, since disk offering id associated with the old service offering is not same for new service offering");
+        }
 
         int newCpu = newServiceOffering.getCpu();
         int newMemory = newServiceOffering.getRamSize();
@@ -1250,6 +1257,14 @@ public class UserVmManagerImpl extends ManagerBase implements UserVmManager, Vir
             validateOfferingMaxResource(newServiceOffering);
         }
         ServiceOfferingVO currentServiceOffering = _offeringDao.findByIdIncludingRemoved(vmInstance.getId(), vmInstance.getServiceOfferingId());
+
+        if (currentServiceOffering.getDiskOfferingStrictness() != newServiceOffering.getDiskOfferingStrictness()) {
+            throw new InvalidParameterValueException("Unable to upgrade VM, since disk offering strictness flag is not same for new service offering and old service offering");
+        }
+
+        if (currentServiceOffering.getDiskOfferingStrictness() && currentServiceOffering.getDiskOfferingId() != newServiceOffering.getDiskOfferingId()) {
+            throw new InvalidParameterValueException("Unable to Scale VM, since disk offering id associated with the old service offering is not same for new service offering");
+        }
 
         int newCpu = newServiceOffering.getCpu();
         int newMemory = newServiceOffering.getRamSize();
@@ -1945,6 +1960,14 @@ public class UserVmManagerImpl extends ManagerBase implements UserVmManager, Vir
         ServiceOfferingVO currentServiceOffering = _offeringDao.findByIdIncludingRemoved(vmInstance.getId(), vmInstance.getServiceOfferingId());
         if (newServiceOffering.isDynamicScalingEnabled() != currentServiceOffering.isDynamicScalingEnabled()) {
             throw new InvalidParameterValueException("Unable to Scale VM: since dynamic scaling enabled flag is not same for new service offering and old service offering");
+        }
+
+        if (currentServiceOffering.getDiskOfferingStrictness() != newServiceOffering.getDiskOfferingStrictness()) {
+           throw new InvalidParameterValueException("Unable to Scale VM, since disk offering strictness flag is not same for new service offering and old service offering");
+        }
+
+        if (currentServiceOffering.getDiskOfferingStrictness() && currentServiceOffering.getDiskOfferingId() != newServiceOffering.getDiskOfferingId()) {
+            throw new InvalidParameterValueException("Unable to Scale VM, since disk offering id associated with the old service offering is not same for new service offering");
         }
 
         int newCpu = newServiceOffering.getCpu();

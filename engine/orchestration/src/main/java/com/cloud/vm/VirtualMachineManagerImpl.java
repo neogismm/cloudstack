@@ -3742,7 +3742,7 @@ public class VirtualMachineManagerImpl extends ManagerBase implements VirtualMac
 
         final ServiceOfferingVO currentServiceOffering = _offeringDao.findByIdIncludingRemoved(vmInstance.getId(), vmInstance.getServiceOfferingId());
         final DiskOfferingVO currentDiskOffering = _diskOfferingDao.findByIdIncludingRemoved(currentServiceOffering.getDiskOfferingId());
-        final DiskOfferingVO newDiskOffering = _diskOfferingDao.findByIdIncludingRemoved(newServiceOffering.getDiskOfferingId());
+        final DiskOfferingVO newDiskOffering = _diskOfferingDao.findById(newServiceOffering.getDiskOfferingId());
 
         checkIfNewOfferingStorageScopeMatchesStoragePool(vmInstance, newDiskOffering);
 
